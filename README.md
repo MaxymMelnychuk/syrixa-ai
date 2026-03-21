@@ -1,6 +1,5 @@
 # Syrixa AI
 
-## What is this project?
 This project is a custom-built, full-stack chatbot web application with Retrieval-Augmented Generation (RAG) capabilities. It allows users to chat with an AI and even upload files (like PDFs and text documents) so the AI can read, understand, and answer questions based on the document's content.
 
 <img width="2844" height="1524" alt="Capture d’écran 2026-03-21 181918" src="https://github.com/user-attachments/assets/c8d49738-f500-4766-843d-7f34091412fc" />
