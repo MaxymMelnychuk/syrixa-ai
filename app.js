@@ -154,6 +154,7 @@ function hideTyping() {
 }
 
 function setStatus(state) {
+  if (!topbarStatus) return;
   if (state === 'thinking') {
     topbarStatus.textContent = '● Thinking…';
     topbarStatus.className   = 'topbar-status thinking';
