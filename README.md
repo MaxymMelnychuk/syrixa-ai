@@ -1,8 +1,7 @@
 # Syrixa AI
 
+## What is this project?
 This project is a custom-built, full-stack chatbot web application with Retrieval-Augmented Generation (RAG) capabilities. It allows users to chat with an AI and even upload files (like PDFs and text documents) so the AI can read, understand, and answer questions based on the document's content.
-
-<img width="2844" height="1524" alt="Capture d’écran 2026-03-21 181918" src="https://github.com/user-attachments/assets/c8d49738-f500-4766-843d-7f34091412fc" />
 
 ## What is Syrixa AI?
 Syrixa AI is the name of this intelligent chatbot. It leverages large language models (LLMs) via OpenRouter to provide conversational AI features directly within a clean, custom-built web interface. Think of it as a personal AI assistant that can learn from the files you provide it.
@@ -42,5 +41,17 @@ This project was built without heavy frontend frameworks to keep things vanilla 
    ```
 2. **Open the app:** Open your web browser and navigate to `http://localhost:3000`.
 3. **Start chatting:** Type a message in the chat box or use the attachment icon to upload a document and ask questions about its content!
+
+## 🚀 Deployment
+
+Syrixa is production-ready and can be deployed easily.
+
+### Quick Start (Docker)
+1. Clone the repo.
+2. Create a `.env` file based on `.env.example`.
+3. Run `docker build -t syrixa .`
+4. Run `docker run -p 3000:3000 --env-file .env syrixa`
+
+For detailed instructions on various platforms, see the [Deployment Guide](docs/deployment.md).
 
 > **Note:** This is purely a personal project created to test AI capabilities and explore how everything works together! 🚀
