@@ -102,23 +102,27 @@ function renderMessages() {
   welcome.style.display = 'none';
 
   session.messages.forEach(msg => {
-    appendMessageDOM(msg.role, msg.content, msg.time, false);
+    appendMessageDOM(msg.role, msg.content, msg.time, false, msg.attachmentName);
   });
 
   scrollToBottom();
 }
 
-function appendMessageDOM(role, content, time, animate = true) {
+function appendMessageDOM(role, content, time, animate = true, attachmentName = null) {
   welcome.style.display = 'none';
 
   const div = document.createElement('div');
   div.className = `message ${role}`;
   if (!animate) div.style.animation = 'none';
 
-  const avatarLetter = role === 'user' ? 'U' : 'N';
+  const avatarLetter = role === 'user' ? 'U' : '◈';
+  const attachmentHTML = role === 'user' && attachmentName
+    ? `<div class="message-attachment"><span class="message-attachment-icon">📄</span><span class="message-attachment-name">${escapeHTML(attachmentName)}</span></div>`
+    : '';
   div.innerHTML = `
     <div class="avatar">${avatarLetter}</div>
     <div>
+      ${attachmentHTML}
       <div class="bubble">${role === 'bot' || role === 'assistant' ? lightMarkdown(content) : escapeHTML(content)}</div>
       <p class="msg-time">${time}</p>
     </div>`;
@@ -139,7 +143,7 @@ function showTyping() {
   typingEl = document.createElement('div');
   typingEl.className = 'message bot';
   typingEl.innerHTML = `
-    <div class="avatar">N</div>
+    <div class="avatar">◈</div>
     <div>
       <div class="bubble typing-bubble">
         <span class="dot"></span><span class="dot"></span><span class="dot"></span>
@@ -197,8 +201,10 @@ async function sendMessage(text) {
     renderSidebar();
   }
 
+  let attachmentNameForMessage = null;
   if (pendingDocumentId) {
     session.documentId = pendingDocumentId;
+    attachmentNameForMessage = pendingFileName;
     clearPendingFile();
   }
 
@@ -208,8 +214,8 @@ async function sendMessage(text) {
   autoResize();
 
   const userTime = now();
-  session.messages.push({ role: 'user', content: text, time: userTime });
-  appendMessageDOM('user', text, userTime);
+  session.messages.push({ role: 'user', content: text, time: userTime, attachmentName: attachmentNameForMessage });
+  appendMessageDOM('user', text, userTime, true, attachmentNameForMessage);
 
   showTyping();
   setStatus('thinking');
