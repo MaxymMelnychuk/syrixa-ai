@@ -130,8 +130,17 @@ function callOpenRouter(messages) {
   });
 }
 
+function setSecurityHeaders(res) {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Content-Security-Policy', "default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://openrouter.ai;");
+}
+
 const server = http.createServer(async (req, res) => {
   setCORSHeaders(res);
+  setSecurityHeaders(res);
 
   if (req.method === 'OPTIONS') {
     res.writeHead(204); res.end(); return;
@@ -139,6 +148,9 @@ const server = http.createServer(async (req, res) => {
 
   const parsed  = url.parse(req.url, true);
   const pathname = parsed.pathname;
+
+ 
+  console.log(`[${new Date().toISOString()}] ${req.method} ${pathname}`);
 
   if (pathname === '/api/upload' && req.method === 'POST') {
     const form = new IncomingForm({
