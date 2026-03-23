@@ -3,6 +3,8 @@
 ## What is this project?
 This project is a custom-built, full-stack chatbot web application with Retrieval-Augmented Generation (RAG) capabilities. It allows users to chat with an AI and even upload files (like PDFs and text documents) so the AI can read, understand, and answer questions based on the document's content.
 
+<img width="2838" height="1516" alt="Capture d’écran 2026-03-23 184717" src="https://github.com/user-attachments/assets/bb0a33fb-435d-490d-a985-f246862c98ee" />
+
 ## What is Syrixa AI?
 Syrixa AI is the name of this intelligent chatbot. It leverages large language models (LLMs) via OpenRouter to provide conversational AI features directly within a clean, custom-built web interface. Think of it as a personal AI assistant that can learn from the files you provide it.
 
