@@ -183,6 +183,18 @@ function showToast(msg) {
 
 let isBusy = false;
 
+async function parseJsonResponseSafe(response) {
+  const raw = await response.text();
+  if (!raw) return {};
+  try {
+    return JSON.parse(raw);
+  } catch {
+    const preview = raw.replace(/\s+/g, ' ').trim().slice(0, 160);
+    const statusText = response.status ? `HTTP ${response.status}` : 'HTTP error';
+    throw new Error(`${statusText}: Expected JSON response, got: ${preview}`);
+  }
+}
+
 async function sendMessage(text) {
   text = text.trim();
   if (!text || isBusy) return;
@@ -240,7 +252,7 @@ async function sendMessage(text) {
       body:    JSON.stringify(payload),
     });
 
-    const data = await response.json();
+    const data = await parseJsonResponseSafe(response);
 
     if (!response.ok || data.error) {
       throw new Error(data.error || `Server error ${response.status}`);
@@ -336,7 +348,7 @@ fileInput.addEventListener('change', async (e) => {
       method: 'POST',
       body: formData
     });
-    const data = await res.json();
+    const data = await parseJsonResponseSafe(res);
     if (!res.ok || data.error) throw new Error(data.error || 'Upload failed');
 
     pendingDocumentId = data.documentId;
