@@ -25,6 +25,28 @@ let activeSessionId = null;
 let pendingDocumentId = null;
 let pendingFileName   = null;
 
+function getApiBaseUrl() {
+  const queryValue = new URLSearchParams(window.location.search).get('apiBase');
+  if (queryValue) {
+    const cleaned = queryValue.replace(/\/+$/, '');
+    localStorage.setItem('syrixa_api_base', cleaned);
+    return cleaned;
+  }
+  const fromStorage = localStorage.getItem('syrixa_api_base');
+  if (fromStorage) return fromStorage.replace(/\/+$/, '');
+  if (typeof window.SYRIXA_API_BASE_URL === 'string' && window.SYRIXA_API_BASE_URL.trim()) {
+    return window.SYRIXA_API_BASE_URL.trim().replace(/\/+$/, '');
+  }
+  return '';
+}
+
+const API_BASE_URL = getApiBaseUrl();
+
+function apiUrl(path) {
+  if (!path.startsWith('/')) path = '/' + path;
+  return `${API_BASE_URL}${path}`;
+}
+
 function now() {
   return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
@@ -186,6 +208,12 @@ let isBusy = false;
 async function parseJsonResponseSafe(response) {
   const raw = await response.text();
   if (!raw) return {};
+  if (response.status === 404) {
+    throw new Error(
+      `HTTP 404: API route not found (${response.url}). ` +
+      `If your frontend and backend are on different hosts, set ?apiBase=https://your-backend-domain`
+    );
+  }
   try {
     return JSON.parse(raw);
   } catch {
@@ -246,7 +274,7 @@ async function sendMessage(text) {
       payload.documentId = session.documentId;
     }
 
-    const response = await fetch('/api/chat', {
+    const response = await fetch(apiUrl('/api/chat'), {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify(payload),
@@ -344,7 +372,7 @@ fileInput.addEventListener('change', async (e) => {
   formData.append('document', file);
 
   try {
-    const res = await fetch('/api/upload', {
+    const res = await fetch(apiUrl('/api/upload'), {
       method: 'POST',
       body: formData
     });
