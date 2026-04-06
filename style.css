@@ -1,6 +1,13 @@
+/**
+ * Syrixa — layout and visual design (dark theme, single-page chat).
+ *
+ * Tokens live in :root so spacing and colors stay consistent. The layout is flex-based:
+ * fixed-width sidebar + fluid main column with a scrollable message stack and pinned composer.
+ */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* --- Design tokens (colors, radii, motion) --- */
 :root {
   
   --bg:          #0a0a0a;
@@ -34,6 +41,7 @@
   --shadow:      0 4px 24px rgba(0,0,0,0.5);
 }
 
+/* --- Page shell --- */
 html, body { height: 100%; }
 
 body {
@@ -51,6 +59,7 @@ body {
 ::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 99px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
 
+/* --- App grid: sidebar + main --- */
 .app {
   display: flex;
   height: 100vh;
@@ -58,6 +67,7 @@ body {
   overflow: hidden;
 }
 
+/* --- Sidebar: session list & primary nav --- */
 .sidebar {
   width: var(--sidebar-w);
   min-width: var(--sidebar-w);
@@ -203,6 +213,7 @@ body {
 .bot-name-small { font-size: 13px; font-weight: 600; color: var(--text); }
 .bot-status-small { font-size: 11px; color: #6e6e6e; }
 
+/* --- Main chat column --- */
 .chat-container {
   flex: 1;
   display: flex;
@@ -212,6 +223,7 @@ body {
   background: var(--bg);
 }
 
+/* --- Top bar: menu, title/status, clear --- */
 .topbar {
   height: var(--topbar-h);
   display: flex;
@@ -282,6 +294,7 @@ body {
 }
 .clear-btn:hover { background: var(--accent-hover); color: var(--text); border-color: var(--border-2); }
 
+/* --- Scrollable message transcript --- */
 .messages {
   flex: 1;
   overflow-y: auto;
@@ -291,6 +304,7 @@ body {
   gap: 4px;
 }
 
+/* --- Empty state + starter prompts --- */
 .welcome {
   flex: 1;
   display: flex;
@@ -356,6 +370,7 @@ body {
 }
 .chip:active { transform: translateY(0); }
 
+/* --- Chat bubbles (user vs assistant alignment) --- */
 .message {
   display: flex;
   align-items: flex-end;
@@ -473,11 +488,12 @@ body {
   30%            { transform: translateY(-6px); opacity: 1;   }
 }
 
+/* --- Composer: attachment row + textarea + actions --- */
 .input-area {
   flex-shrink: 0;
   padding: 12px 20px 16px;
   background: var(--bg);
-  width: 50rem;
+  width: min(50rem, 100%);
   margin-right: auto;
   margin-left: auto;
 }
@@ -609,6 +625,18 @@ body {
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+/* Respect OS “reduce motion” so the app stays usable for vestibular sensitivity. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* --- Narrow screens: overlay sidebar, tighter padding --- */
 @media (max-width: 640px) {
   .sidebar { position: absolute; height: 100%; }
   .sidebar.hidden { transform: translateX(calc(-1 * var(--sidebar-w))); }

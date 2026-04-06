@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Shown in search results and link previews; keep it short and accurate. -->
   <meta name="description" content="Syrixa — an AI chat assistant. Message instantly and get intelligent replies.">
+  <!-- Tint the browser chrome on mobile to match the dark UI. -->
+  <meta name="theme-color" content="#0a0a0a">
   <title>Syrixa — AI Chat</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,16 +14,18 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+  <!-- Root layout: sidebar (history + nav) + main chat column. -->
   <div class="app" id="app">
+    <!-- Left rail: branding, new chat, scrollable session list, footer placeholder. -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
         <div class="logo">
           <span class="logo-icon">&#x25C8;</span>
           <span class="logo-text">Syrixa</span>
         </div>
-              </div>
-      <nav class="sidebar-nav">
-        <button class="nav-btn active" id="newChatBtn">
+      </div>
+      <nav class="sidebar-nav" aria-label="Chat actions">
+        <button type="button" class="nav-btn active" id="newChatBtn">
           <span class="nav-icon">&#xFF0B;</span>
           New chat
         </button>
@@ -30,44 +35,55 @@
       </div>
       <div class="sidebar-footer">
         <div class="bot-info">
-          <div class="bot-avatar small">U</div>
+          <div class="bot-avatar small" aria-hidden="true">U</div>
           <div>
             <p class="bot-name-small">User</p>
-            <p class="bot-status-small">ID: 25820537205</p>
+            <p class="bot-status-small">Local session</p>
           </div>
         </div>
       </div>
     </aside>
+
+    <!-- Main column: toolbar, message log, composer. -->
     <main class="chat-container" id="chatContainer">
       <header class="topbar">
-        <button class="menu-btn" id="menuBtn" aria-label="Open sidebar">
+        <button type="button" class="menu-btn" id="menuBtn" aria-label="Open sidebar" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
-        <button class="clear-btn" id="clearBtn" aria-label="Clear conversation">Clear</button>
+        <!-- Title + live status; id is updated from app.js during requests. -->
+        <div class="topbar-title">
+          <span class="topbar-name">Syrixa</span>
+          <span class="topbar-status" id="topbarStatus">● Online</span>
+        </div>
+        <button type="button" class="clear-btn" id="clearBtn" aria-label="Clear conversation">Clear</button>
       </header>
+
+      <!-- Message list: role=log + aria-live for assistive tech when new bubbles appear. -->
       <section class="messages" id="messages" role="log" aria-live="polite" aria-label="Chat messages">
         <div class="welcome" id="welcome" style="display:none;">
-          <div class="welcome-icon">&#x25C8;</div>
+          <div class="welcome-icon" aria-hidden="true">&#x25C8;</div>
           <h2 class="welcome-title">Syrixa is ready to chat</h2>
           <p class="welcome-sub">Type a message below to start the conversation.</p>
           <div class="welcome-chips" id="welcomeChips">
-            <button class="chip" data-msg="Hello, who are you?">Who are you?</button>
-            <button class="chip" data-msg="Tell me a joke!">Tell me a joke</button>
-            <button class="chip" data-msg="What can you do?">What can you do?</button>
-            <button class="chip" data-msg="What time is it?">What time is it?</button>
+            <button type="button" class="chip" data-msg="Hello, who are you?">Who are you?</button>
+            <button type="button" class="chip" data-msg="Tell me a joke!">Tell me a joke</button>
+            <button type="button" class="chip" data-msg="What can you do?">What can you do?</button>
+            <button type="button" class="chip" data-msg="What time is it?">What time is it?</button>
           </div>
         </div>
       </section>
+
       <footer class="input-area">
+        <!-- Shown after the user picks a file; filename comes from app.js. -->
         <div id="fileDisplay" class="file-display" style="display: none;">
           <span class="file-icon">&#x1F4C4;</span>
           <span id="fileName" class="file-name">filename.pdf</span>
-          <button id="removeFileBtn" class="remove-file-btn" aria-label="Remove File">&#x2715;</button>
+          <button type="button" id="removeFileBtn" class="remove-file-btn" aria-label="Remove file">&#x2715;</button>
         </div>
         <div class="input-wrapper" id="inputWrapper">
           <input type="file" id="fileInput" accept=".pdf,.txt" hidden />
-          <button class="attach-btn" id="attachBtn" aria-label="Attach File">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <button type="button" class="attach-btn" id="attachBtn" aria-label="Attach file">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
             </svg>
           </button>
@@ -79,8 +95,8 @@
             maxlength="2000"
             aria-label="Type your message"
           ></textarea>
-          <button class="send-btn" id="sendBtn" aria-label="Send message" disabled>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <button type="button" class="send-btn" id="sendBtn" aria-label="Send message" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <line x1="22" y1="2" x2="11" y2="13"></line>
               <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
             </svg>
