@@ -1,3 +1,4 @@
+# Keep the image small and avoid leaking local secrets into layers.
 node_modules
 .env
 .git

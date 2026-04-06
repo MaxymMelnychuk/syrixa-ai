@@ -5,8 +5,16 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "check": "node --check server.js && node --check rag.js && node --check app.js"
   },
+  "keywords": [
+    "chat",
+    "openrouter",
+    "rag",
+    "langchain",
+    "syrixa"
+  ],
   "engines": {
     "node": ">=18"
   },

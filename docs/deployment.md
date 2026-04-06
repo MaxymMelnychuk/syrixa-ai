@@ -2,6 +2,8 @@
 
 This guide covers how to deploy the Syrixa AI chat bot to various platforms.
 
+The Node process handles **SIGTERM** / **SIGINT** by closing the HTTP server before exit, which plays nicely with Docker and process managers (see `server.js`).
+
 ## Prerequisites
 
 - An [OpenRouter](https://openrouter.ai/) API Key.
@@ -9,7 +11,7 @@ This guide covers how to deploy the Syrixa AI chat bot to various platforms.
 
 ## 🐳 Deployment with Docker (Recommended)
 
-Docker is the most consistent way to deploy Syrixa AI.
+Docker is the most consistent way to deploy Syrixa AI. The included `Dockerfile` defines a **HEALTHCHECK** that hits `/` so orchestrators can restart unhealthy containers automatically.
 
 1.  **Build the image:**
     ```bash
@@ -51,4 +53,4 @@ Docker is the most consistent way to deploy Syrixa AI.
 The server is configured with:
 - **CORS**: Restricted or open depending on your needs (currently open `*`).
 - **Security Headers**: Includes CSP, XSS protection, and frame options.
-- **Graceful Shutdown**: Handles `SIGTERM` for clean exits in containerized environments.
+- **Graceful shutdown**: On `SIGTERM` or `SIGINT`, the server stops accepting new connections and exits after existing requests finish (with a 10s safety timeout).

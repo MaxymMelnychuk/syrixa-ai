@@ -14,6 +14,16 @@ Syrixa AI is the name of this intelligent chatbot. It leverages large language m
 - **Document Q&A:** Ask the AI specific questions about the documents you uploaded, and it will retrieve the relevant information to answer you (RAG).
 - **Test AI Models:** Easily switch between different AI models provided by OpenRouter by updating the environment file.
 
+## Project layout
+
+| Path | Role |
+|------|------|
+| `server.js` | HTTP server: static files, `/api/chat`, `/api/upload`, OpenRouter proxy |
+| `rag.js` | PDF/text chunking, embeddings, in-memory vector search |
+| `app.js` | Browser UI: sessions, composer, fetch to API |
+| `index.html` / `style.css` | Markup and styling for the chat shell |
+| `docs/deployment.md` | Docker and hosting notes |
+
 ## What technologies are used?
 This project was built without heavy frontend frameworks to keep things vanilla and straightforward for learning purposes:
 - **Backend:** Node.js (Vanilla Node `http` server routing)
@@ -29,7 +39,11 @@ This project was built without heavy frontend frameworks to keep things vanilla 
    ```bash
    npm install
    ```
-3. **Set up Environment Variables:** Create a `.env` file in the root directory and add your API credentials using the following format:
+3. **Optional sanity check** (syntax only, no server started):
+   ```bash
+   npm run check
+   ```
+4. **Set up Environment Variables:** Create a `.env` file in the root directory and add your API credentials using the following format:
    ```env
    OPENROUTER_API_KEY=your_openrouter_api_key_here
    OPENROUTER_MODEL=openai/gpt-4o-mini
